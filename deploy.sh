@@ -3,9 +3,12 @@
 VERSION="v$(date +%s)"
 TIME="$(date)"
 
-echo "Updating deployment files BEFORE build..."
+echo "Resetting files from templates..."
 
-# Decide environment switch
+cp deploy.template.html deploy.html
+cp logs.template.html logs.html
+
+# Decide environment
 if grep -q "proxy_pass http://blue;" nginx.conf; then
     ENV="GREEN"
     sed -i 's/proxy_pass http:\/\/blue;/proxy_pass http:\/\/green;/' nginx.conf
@@ -14,13 +17,15 @@ else
     sed -i 's/proxy_pass http:\/\/green;/proxy_pass http:\/\/blue;/' nginx.conf
 fi
 
-# Update deploy.html
+echo "Updating deployment page..."
+
 sed -i "s/VERSION/$VERSION/" deploy.html
 sed -i "s/BUILD_TIME/$TIME/" deploy.html
 sed -i "s/STATUS/SUCCESS/" deploy.html
 sed -i "s/ENV/$ENV/" deploy.html
 
-# Update logs.html
+echo "Updating logs..."
+
 LOGS="[INFO] Starting deployment...<br>
 [INFO] Building Docker image...<br>
 [SUCCESS] Container started successfully<br>
@@ -34,10 +39,10 @@ echo "Stopping old GREEN container..."
 docker stop green || true
 docker rm green || true
 
-echo "Building new version..."
+echo "Building Docker image..."
 docker build -t dev-dashboard:$VERSION .
 
-echo "Running GREEN container..."
+echo "Running container..."
 docker run -d -p 8082:80 --name green dev-dashboard:$VERSION
 
 echo "Restarting Nginx..."
