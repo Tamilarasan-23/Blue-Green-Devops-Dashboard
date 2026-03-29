@@ -1,7 +1,7 @@
 #!/bin/bash
 
-VERSION="v$(date +%s)"
-TIME="$(date)"
+VERSION=v$(date +%s)
+TIME=$(date)
 
 echo "Resetting files from templates..."
 
