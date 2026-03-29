@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DevOps Dashboard</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  background: linear-gradient(135deg, #2b1055, #7597de);
+  color: white;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.sidebar a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 30px;
+}
+
+.title {
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+/* Cards */
+.cards {
+  display: flex;
+  gap: 20px;
+}
+
+.card {
+  flex: 1;
+  padding: 25px;
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* Blue card */
+.green {
+  border-left: 5px solid #00ff9f;
+}
+
+/* Status */
+.status {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>🚀 DevOps</h2>
+  <a href="index.html">Dashboard</a>
+  <a href="deploy.html">Deployments</a>
+  <a href="logs.html">Logs</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <div class="title">Blue-Green Deployment</div>
+
+  <div class="cards">
+
+    <!-- BLUE CARD -->
+    <div class="card green">
+      	<h3>🟢 GREEN Environment</h3>
+	<p>Version 2 - New Release</p>
+      <div class="status">Status: Running</div>
+      <div class="status">Last Updated: BUILD_TIME</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  Dev by <b>StarDev</b>
+</div>
+
+</body>
+</html>
