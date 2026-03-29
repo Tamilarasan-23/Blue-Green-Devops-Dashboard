@@ -3,15 +3,7 @@
 VERSION="v$(date +%s)"
 TIME="$(date)"
 
-echo "Stopping old GREEN container..."
-docker stop green || true
-docker rm green || true
-
-echo "Building new version..."
-docker build --build-arg BUILD_TIME="$TIME" -t dev-dashboard:$VERSION .
-
-echo "Running GREEN container..."
-docker run -d -p 8082:80 --name green dev-dashboard:$VERSION
+echo "Updating deployment files BEFORE build..."
 
 # Decide environment switch
 if grep -q "proxy_pass http://blue;" nginx.conf; then
@@ -22,15 +14,13 @@ else
     sed -i 's/proxy_pass http:\/\/green;/proxy_pass http:\/\/blue;/' nginx.conf
 fi
 
-echo "Updating deployment history..."
-
+# Update deploy.html
 sed -i "s/VERSION/$VERSION/" deploy.html
 sed -i "s/BUILD_TIME/$TIME/" deploy.html
 sed -i "s/STATUS/SUCCESS/" deploy.html
 sed -i "s/ENV/$ENV/" deploy.html
 
-echo "Updating logs..."
-
+# Update logs.html
 LOGS="[INFO] Starting deployment...<br>
 [INFO] Building Docker image...<br>
 [SUCCESS] Container started successfully<br>
@@ -40,7 +30,17 @@ LOGS="[INFO] Starting deployment...<br>
 
 sed -i "s|LOG_CONTENT|$LOGS|" logs.html
 
-# Restart nginx
+echo "Stopping old GREEN container..."
+docker stop green || true
+docker rm green || true
+
+echo "Building new version..."
+docker build -t dev-dashboard:$VERSION .
+
+echo "Running GREEN container..."
+docker run -d -p 8082:80 --name green dev-dashboard:$VERSION
+
+echo "Restarting Nginx..."
 NGINX_ID=$(docker ps -q --filter ancestor=nginx)
 docker restart $NGINX_ID
 
